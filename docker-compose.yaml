@@ -1,0 +1,55 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    container_name: slack-cf7
+    ports:
+      - 8130:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: slack-cf7
+    volumes:
+      - ./codes/v1.1.0/:/var/www/html/wp-content/plugins/slack-cf7/
+      - slack:/var/www/html
+    depends_on:
+        - db
+    networks:
+      - project_slack
+  db:
+    image: mysql:5.7
+    container_name: mysql_slack
+    restart: always
+    environment:
+      MYSQL_DATABASE: slack-cf7
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db_slack:/var/lib/mysql
+    networks:
+      - project_slack
+      
+  phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: slack_phpmyadmin
+        restart: always
+        ports: 
+          - 8950:80
+        environment:
+          PMA_HOST: db
+        depends_on:
+          - db
+        networks:
+          - project_slack
+networks:
+  project_slack:
+    driver: bridge
+
+volumes:
+  slack:
+  db_slack:
