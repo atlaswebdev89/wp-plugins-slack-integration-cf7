@@ -46,20 +46,24 @@ register_activation_hook(__FILE__, 'sicf_atl_wp_slack_noty_active');
 register_uninstall_hook     (__FILE__, 'sicf_atl_wp_slack_noty_unistall');
 
 // Проверяем установлен ли плагин Contact Form 7 по наличию функция этого плагина 
-if(!function_exists( 'wpcf7_contact_form' ) && !function_exists( 'wpcf7_save_contact_form' )) {
-    add_action('admin_notices', 'general_admin_notice_slack');
-        function general_admin_notice_slack(){
-                global $pagenow;
-                        if ( $pagenow == 'plugins.php' ) {
-                            echo   '<div class="notice notice-error is-dismissible">
-                                        <p>'.__('For the Slack integration Contact form 7 plugin to work, you need to install the Contact Form 7 plugin', SICF_DOMAIN_TEXT).'</p>
-                                    </div>';
-                            error_log(__("Activate plugin Contact Form 7, please..",SICF_DOMAIN_TEXT));
-                        }
-            }
-            
-        return false;
+add_action('init', 'sifc_wp_atl_check_cf7');
+function sifc_wp_atl_check_cf7 () {     
+    if(!function_exists( 'wpcf7_contact_form' ) && !function_exists( 'wpcf7_save_contact_form' )) {
+        add_action('admin_notices', 'general_admin_notice_slack');
+            function general_admin_notice_slack(){
+                    global $pagenow;
+                            if ( $pagenow == 'plugins.php' ) {
+                                echo   '<div class="notice notice-error is-dismissible">
+                                            <p>'.__('For the Slack integration Contact form 7 plugin to work, you need to install the Contact Form 7 plugin', SICF_DOMAIN_TEXT).'</p>
+                                        </div>';
+                                error_log(__("Activate plugin Contact Form 7, please..",SICF_DOMAIN_TEXT));
+                            }
+                }
+                
+            return false;
+    }
 }
+
 // Функция для работы с api slack
 require_once 'includes/sicf_slack_api_data.php';
 // Функция для вывода панели настройки плагина Slack
