@@ -27,6 +27,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Frequently Asked Questions ==
 
 == Screenshots ==
+1. Внешний вид виджета в админ панели Wordpress
+2. Пример вывода курсов валют в сайдбаре
 
 == Upgrade Notice ==
 
